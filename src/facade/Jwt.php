@@ -1,7 +1,6 @@
 <?php
 namespace ozings\facade;
 
-
 class Facade
 {
 	/**
@@ -19,7 +18,8 @@ class Facade
 	 */
 	protected static function getFacadeClass()
 	{}
-
+	
+	
 	/**
 	 * 创建Facade实例
 	 * @static
@@ -29,7 +29,7 @@ class Facade
 	 */
 	protected static function createFacade(bool $newInstance = false)
 	{
-		$class = static::getFacadeClass() ?: 'ozings\jwt';
+		$class = static::getFacadeClass() ?: 'ozings\Jwt';
 
 		if (static::$alwaysNewInstance) {
 			$newInstance = true;
@@ -46,36 +46,27 @@ class Facade
 		return self::$instance;
 
 	}
-	
-	/**
-     * @param string $name
-     * @param array  $config
-     *
-     * @return \EasyWeChat\Kernel\ServiceContainer
-     */
-    public static function make($name, array $config, bool $newInstance = false)
-    {
-        
-		$class = static::getFacadeClass() ? : "\\ozings\\jwt\\{$name}";
-
-		if (static::$alwaysNewInstance) {
-			$newInstance = true;
-		}
-
-		if ($newInstance) {
-			return new $class($config);
-		}
-
-		if (!self::$instance) {
-			self::$instance = new $class($config);
-		}
-
-		return self::$instance;
-    }
 
 	// 调用实际类的方法
-	public static function __callStatic($name, $arguments)
+	public static function __callStatic($method, $params)
 	{
-		return self::make($name, ...$arguments);
+		return call_user_func_array([static::createFacade(), $method], $params);
 	}
+}
+
+/**
+ * @see \ozings\Jwt
+ * @mixin \ozings\Jwt
+ */
+class Jwt extends Facade
+{
+    /**
+     * 获取当前Facade对应类名（或者已经绑定的容器对象标识）
+     * @access protected
+     * @return string
+     */
+    protected static function getFacadeClass()
+    {
+        return 'ozings\Jwt';
+    }
 }

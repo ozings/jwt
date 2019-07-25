@@ -1,9 +1,8 @@
 <?php
-namespace ozings\jwt;
+namespace ozings;
 
-class Auth
+class Jwt
 {
-
 	protected $config;
 	protected $check = ['time'];
 	
@@ -15,10 +14,21 @@ class Auth
 	 * 		'token_cache_time'=>'',
 	 * ];
      */
-    public function __construct($config = []) {
+    public function __construct($config = [])
+	{
         $this->config = $config;
     }
 
+	/**
+     * 初始化配置参数
+     * @access public
+     * @param array $config 连接配置
+     * @return void
+     */
+    public function setConfig($config): void
+    {
+        $this->config = $config;
+    }
 
     /**
      * 加密函数
@@ -31,8 +41,8 @@ class Auth
 
     /**
      * 加密函数
-     * @param $data  待加密的数据
-     * @param $key   用于加密的key
+     * @param $data  string 待加密的数据
+     * @param $key   string 用于加密的key
      * @return string 加密后的字符串
      */
     public function apiEncrypt($data)
@@ -45,8 +55,8 @@ class Auth
 
     /**
      * 解密函数
-     * @param $data   待解密的数据
-     * @param $key    加密的key
+     * @param $data  string 待解密的数据
+     * @param $key   string 加密的key
      * @return string 解密后的字符串
      */
     public function apiDecrypt($data)
