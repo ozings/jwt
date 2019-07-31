@@ -1,4 +1,5 @@
 <?php
+
 namespace ozings;
 
 class Jwt
@@ -115,11 +116,11 @@ class Jwt
 			}
 		}
 		//自定义过期时间
-        if ($cache_time) {
-			$this->config['token_cache_time'] = $cache_time;
+        if (!$cache_time) {
+            $cache_time = $this->config['token_cache_time'];
 		}
 		//判断过期时间
-        if ((time() - $data['time']) > $this->config['token_cache_time']) {
+        if ((time() - $data['time']) > $cache_time) {
 			return false;
         }
         return $data;
